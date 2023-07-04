@@ -1,19 +1,15 @@
 package com.capstone.istakk;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,36 +29,11 @@ public class MainActivity extends AppCompatActivity {
         inventory = findViewById(R.id.inventory);
         exit = findViewById(R.id.exit);
 
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDrawer(drawerlayout);
-            }
-        });
-        dashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recreate();
-            }
-        });
-        history.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                redirectActivity(MainActivity.this, HistoryActivity.class);
-            }
-        });
-        inventory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                redirectActivity(MainActivity.this, InventoryActivity.class);
-            }
-        });
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Exit", Toast.LENGTH_SHORT).show();
-            }
-        });
+        menu.setOnClickListener(view -> openDrawer(drawerlayout));
+        dashboard.setOnClickListener(view -> recreate());
+        history.setOnClickListener(view -> redirectActivity(MainActivity.this, HistoryActivity.class));
+        inventory.setOnClickListener(view -> redirectActivity(MainActivity.this, InventoryActivity.class));
+        exit.setOnClickListener(view -> Toast.makeText(MainActivity.this, "Exit", Toast.LENGTH_SHORT).show());
         {
 
         }

@@ -1,8 +1,11 @@
 package com.capstone.istakk;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -16,6 +19,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_PRODUCT = "product_name";
     private static final String COLUMN_QUANTITY = "product_quantity";
+    private static final String COLUMN_LOW_INVENTORY = "low_inventory_quantity";
     private static final String COLUMN_PRICE = "product_price";
 
 
@@ -38,4 +42,32 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+    
+    void addBook(String product, Integer quantity, Integer price) {
+        SQLiteDatabase db= this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        
+        cv.put(COLUMN_PRODUCT, product);
+        cv.put(COLUMN_QUANTITY, quantity);
+        cv.put(COLUMN_PRICE, price);
+        long result = db.insert(TABLE_NAME, null, cv);
+        if(result == -1) {
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
+        }
+        
+    }
+
+    Cursor readAllData () {
+        String query = "SELECT * FROM " + TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
 }
