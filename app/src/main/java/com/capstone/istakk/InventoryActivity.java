@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 
 public class InventoryActivity extends AppCompatActivity {
 
+    MyDatabaseHelper myDB = new MyDatabaseHelper(InventoryActivity.this);
     DrawerLayout drawerlayout;
     ImageView menu;
     LinearLayout dashboard, history, inventory, exit;
@@ -28,7 +30,6 @@ public class InventoryActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton add_btn;
 
-    MyDatabaseHelper myDB;
     ArrayList<String> _id, product_name, product_quantity, product_price;
     CustomAdapter customAdapter;
 
@@ -85,7 +86,6 @@ public class InventoryActivity extends AppCompatActivity {
             }
         });
 
-        myDB = new MyDatabaseHelper(InventoryActivity.this);
         _id = new ArrayList<>();
         product_name = new ArrayList<>();
         product_quantity = new ArrayList<>();
@@ -102,6 +102,8 @@ public class InventoryActivity extends AppCompatActivity {
         if (cursor.getCount() == 0) {
             Toast.makeText(this, "No data.", Toast.LENGTH_SHORT).show();
         } else {
+            int columnCount = cursor.getColumnCount();
+            Log.d("Cursor", "Column Count: " + columnCount);
             while (cursor.moveToNext()) {
                 _id.add(cursor.getString(0));
                 product_name.add(cursor.getString(1));

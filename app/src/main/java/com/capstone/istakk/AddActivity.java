@@ -7,9 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+
 public class AddActivity extends AppCompatActivity {
 
     EditText product_input, quantity_input, low_inventory_input, price_input;
+
+    MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
     Button add_btn;
 
     @Override
@@ -23,11 +26,11 @@ public class AddActivity extends AppCompatActivity {
         price_input = findViewById(R.id.price_input);
         add_btn = findViewById(R.id.add_btn);
         add_btn.setOnClickListener(view -> {
-            MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this);
+
             myDB.addBook(
-                    product_input.getText() .toString() .trim(),
-                    Integer.valueOf(quantity_input.getText() .toString() .trim()),
-                    Integer.valueOf(price_input.getText() .toString() .trim()));
+                    product_input.getText().toString().trim(),
+                    Integer.valueOf(quantity_input.getText().toString().trim()),
+                    Integer.valueOf(price_input.getText().toString().trim()));
         })
     ;}
 }

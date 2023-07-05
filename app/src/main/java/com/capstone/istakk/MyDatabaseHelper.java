@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -43,7 +44,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
     
-    void addBook(String product, Integer quantity, Integer price) {
+    public void addBook(String product, Integer quantity, Integer price) {
         SQLiteDatabase db= this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         
@@ -52,14 +53,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_PRICE, price);
         long result = db.insert(TABLE_NAME, null, cv);
         if(result == -1) {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+            Log.i("fail","Failed");
         } else {
-            Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
+             Log.i("success","Added successfully!");
         }
         
     }
 
-    Cursor readAllData () {
+    public Cursor readAllData () {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
