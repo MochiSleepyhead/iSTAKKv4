@@ -1,8 +1,11 @@
 package com.capstone.istakk;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +30,7 @@ public class InventoryActivity extends AppCompatActivity {
     ImageView menu;
     LinearLayout dashboard, history, inventory, exit;
 
-    RecyclerView recyclerView;
+    RecyclerView inventoryData;
     FloatingActionButton add_btn;
 
     ArrayList<String> _id, product_name, product_quantity, product_price;
@@ -76,7 +79,7 @@ public class InventoryActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.recyclerView);
+        inventoryData = findViewById(R.id.recyclerView);
         add_btn = findViewById(R.id.add_btn);
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,10 +94,18 @@ public class InventoryActivity extends AppCompatActivity {
         product_quantity = new ArrayList<>();
         product_price = new ArrayList<>();
 
-        storeDataInArrays();
+        inventoryData = findViewById(R.id.recyclerView);
         customAdapter= new CustomAdapter(InventoryActivity.this, _id, product_name, product_quantity, product_price);
-        recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(InventoryActivity.this));
+        inventoryData.setAdapter(customAdapter);
+        inventoryData.setLayoutManager(new LinearLayoutManager(InventoryActivity.this));
+
+        recyclerClickListeners();
+        storeDataInArrays();
+    }
+
+    private void recyclerClickListeners() {
+        inventoryData.setItemAnimator(new DefaultItemAnimator());
+        inventoryData.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
     private void storeDataInArrays() {
@@ -110,8 +121,11 @@ public class InventoryActivity extends AppCompatActivity {
                 product_quantity.add(cursor.getString(2));
                 product_price.add(cursor.getString(3));
             }
+            customAdapter.notifyDataSetChanged();
         }
     }
+
+
 
     public static void openDrawer(DrawerLayout drawerLayout) {
         drawerLayout.openDrawer(GravityCompat.START);
