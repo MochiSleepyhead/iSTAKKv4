@@ -13,6 +13,12 @@
         android:theme="@style/Theme.ISTAKK"
         tools:targetApi="31">
         <activity
+            android:name=".DeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddActivity"
             android:label="Add Inventory"
             android:parentActivityName=".MainActivity"

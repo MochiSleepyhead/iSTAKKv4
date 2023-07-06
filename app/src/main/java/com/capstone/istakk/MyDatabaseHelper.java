@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
-    private Context context;
     private static final String DATABASE_NAME = "InventoryBase.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -20,7 +19,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_PRODUCT = "product_name";
     private static final String COLUMN_QUANTITY = "product_quantity";
-    private static final String COLUMN_LOW_INVENTORY = "low_inventory_quantity";
     private static final String COLUMN_PRICE = "product_price";
 
 
@@ -43,32 +41,48 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
-    
-    public void addBook(String product, Integer quantity, Integer price) {
-        SQLiteDatabase db= this.getWritableDatabase();
+
+    public void addData(String product, int quantity, int price) {
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        
+
         cv.put(COLUMN_PRODUCT, product);
         cv.put(COLUMN_QUANTITY, quantity);
         cv.put(COLUMN_PRICE, price);
         long result = db.insert(TABLE_NAME, null, cv);
-        if(result == -1) {
-            Log.i("fail","Failed");
+        if (result == -1) {
+            Log.i("MyDatabaseHelper", "Failed to add data");
         } else {
-             Log.i("success","Added successfully!");
+            Log.i("MyDatabaseHelper", "Data added successfully");
         }
-        
+        db.close();
     }
 
-    public Cursor readAllData () {
-        String query = "SELECT * FROM " + TABLE_NAME;
+    public Cursor readAllData() {
         SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = null;
-        if(db != null) {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
+        String query = "SELECT * FROM " + TABLE_NAME;
+        return db.rawQuery(query, null);
     }
 
+    public boolean deleteData(String itemId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selection = COLUMN_ID + " = ?";
+        String[] selectionArgs = {itemId};
+        int rowsAffected = db.delete(TABLE_NAME, selection, selectionArgs);
+        db.close();
+        return rowsAffected > 0;
+    }
+
+    public boolean editData(String itemId, String newProductName, int newQuantity, int newPrice) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PRODUCT, newProductName);
+        values.put(COLUMN_QUANTITY, newQuantity);
+        values.put(COLUMN_PRICE, newPrice);
+        String selection = COLUMN_ID + " = ?";
+        String[] selectionArgs = {itemId};
+        int rowsAffected = db.update(TABLE_NAME, values, selection, selectionArgs);
+        db.close();
+        return rowsAffected > 0;
+    }
 }
